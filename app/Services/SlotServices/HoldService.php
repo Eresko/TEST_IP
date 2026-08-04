@@ -110,8 +110,6 @@ class HoldService
 
             });
 
-
-
         }
         catch (\Exception $e) {
             Cache::increment("slots:{$slotId}:remaining");
@@ -123,10 +121,6 @@ class HoldService
 
 
         }
-
-
-
-
 
     }
 }
