@@ -1,0 +1,217 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method App\\Console\\Commands\\SwaggerGenerate\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Console/Commands/SwaggerGenerate.php
+
+		-
+			message: '#^Parameter \$dto of method App\\Contracts\\NotificationProvider\:\:send\(\) has invalid type App\\Dto\\Notification\\MessageDto\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Contracts/NotificationProvider.php
+
+		-
+			message: '#^Parameter \$user of method App\\Contracts\\NotificationProvider\:\:send\(\) has invalid type App\\Models\\User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Contracts/NotificationProvider.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\AvailabilityIndexRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/AvailabilityIndexRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ConfirmHoldRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/ConfirmHoldRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\CreateHoldRequest\:\:rules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Requests/CreateHoldRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$author_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$error_message\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$period_from\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$period_to\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\NotificationReportResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to constant COMPLETED on an unknown class App\\Enums\\ReportStatus\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Access to constant FAILED on an unknown class App\\Enums\\ReportStatus\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^PHPDoc tag @mixin contains unknown class App\\Models\\NotificationReport\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Resources/NotificationReportResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\SlotResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/SlotResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\SlotResource\:\:toArray\(\) return type with generic interface Illuminate\\Contracts\\Support\\Arrayable does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Http/Resources/SlotResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$telegram\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\UserResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\UserResource\:\:toArray\(\) return type with generic interface Illuminate\\Contracts\\Support\\Arrayable does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^PHPDoc tag @mixin contains unknown class App\\Models\\User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Resources/UserResource.php
+
+		-
+			message: '#^Method App\\Jobs\\ProcessGeodistributedHold\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Jobs/ProcessGeodistributedHold.php
+
+		-
+			message: '#^Class App\\Models\\Hold uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Hold.php
+
+		-
+			message: '#^Method App\\Models\\Hold\:\:slot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Hold.php
+
+		-
+			message: '#^Class App\\Models\\Slot uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Slot.php
+
+		-
+			message: '#^Method App\\Models\\Slot\:\:holds\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Slot.php
+
+		-
+			message: '#^Method App\\Services\\SlotServices\\HoldService\:\:executeGeodistributedHold\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/SlotServices/HoldService.php
+
+		-
+			message: '#^Method App\\Services\\SlotServices\\SlotService\:\:fetchFromDatabase\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SlotServices/SlotService.php
+
+		-
+			message: '#^Method App\\Services\\SlotServices\\SlotService\:\:getAvailableSlotsWithCache\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SlotServices/SlotService.php
+
+		-
+			message: '#^Class Database\\Factories\\SlotFactory extends generic class Illuminate\\Database\\Eloquent\\Factories\\Factory but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: database/factories/SlotFactory.php
