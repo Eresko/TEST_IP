@@ -1,0 +1,99 @@
+name: PHPStan Core
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, redis, pdo_mysql
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+        env:
+          REDIS_CLIENT: mock
+          CACHE_STORE: array
+          SESSION_DRIVER: array
+          QUEUE_CONNECTION: sync
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.php
+
+      - name: Run PHPStan on Changed Files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          vendor/bin/phpstan analyse --level=6 ${{ steps.changed-files.outputs.all_changed_files }} --error-format=github
+
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: test_streamer_testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          # Добавили pdo и pdo_mysql. Также отключаем ini-файлы, которые могут мешать
+          extensions: dom, curl, libxml, mbstring, zip, redis, pdo, pdo_mysql, bcmath
+          coverage: none
+          # Регистрируем эту версию PHP как глобальную для CLI
+          update-alternatives: true
+
+      - name: Copy .env for Testing
+        run: php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Generate Key
+        run: php artisan key:generate --env=testing
+
+      # Запускаем миграцию конфига напрямую через вендорный PHPUnit (это уберет WARN)
+      - name: Migrate PHPUnit Configuration
+        run: vendor/bin/phpunit --migrate-configuration || true
+
+      # Запускаем тесты напрямую через vendor/bin/phpunit вместо artisan test.
+      # Это решает проблему дублирования флагов конфигурации и изоляции переменных среды.
+      - name: Run Feature Tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: test_streamer_testing
+          DB_USERNAME: root
+          DB_PASSWORD: ""
+          SCOUT_DRIVER: collection
+        run: vendor/bin/phpunit --testsuite=Feature

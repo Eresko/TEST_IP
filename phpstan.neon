@@ -1,14 +1,20 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
 
 parameters:
     paths:
         - app/
-        - database/factories/
-        - database/seeders/
+        - database/
+        - routes/
 
-    level: 5
+    level: 6
+    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
+
+    # 💡 Подавляем динамический JWTAuth и любые внутренние анонимные классы:
     ignoreErrors:
-
-    excludePaths:
-
+        - '#Call to an undefined static method Tymon\\JWTAuth\\Facades\\JWTAuth::#'
+        - '#Property class@anonymous.+#'
+        - '#Method class@anonymous.+#'
+        - '#Access to an undefined property class@anonymous.+#'

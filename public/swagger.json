@@ -11,44 +11,14 @@
         }
     ],
     "paths": {
-        "/notifications": {
+        "/slots/availability": {
             "get": {
                 "tags": [
-                    "Сообщения"
+                    "Слоты"
                 ],
-                "summary": "Получение списка сообщений с фильтрацией и пагинацией",
-                "operationId": "getNotifications",
+                "summary": "Получение доступных слотов",
+                "operationId": "getSlotsAvailability",
                 "parameters": [
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Фильтр по статусу",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "example": "waiting",
-                            "enum": [
-                                "waiting",
-                                "sent",
-                                "delivered",
-                                "discarded"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "channel",
-                        "in": "query",
-                        "description": "Канал отправки",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "example": "email",
-                            "enum": [
-                                "sms",
-                                "email"
-                            ]
-                        }
-                    },
                     {
                         "name": "page",
                         "in": "query",
@@ -61,17 +31,17 @@
                     {
                         "name": "sort",
                         "in": "query",
-                        "description": "Сортировка",
+                        "description": "Сортировка (например: id_asc, id_desc, remaining_asc, remaining_desc)",
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "example": "status_asc"
+                            "example": "id_asc"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Список сообщений с пагинацией",
+                        "description": "Список доступных слотов с пагинацией",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -80,494 +50,17 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 2007
-                                                    },
-                                                    "user": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": 57
-                                                            },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "Aniya Hackett"
-                                                            },
-                                                            "phone": {
-                                                                "type": "integer",
-                                                                "example": 89128060777
-                                                            },
-                                                            "email": {
-                                                                "type": "string",
-                                                                "example": "palma.skiles@example.com"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "example": "2025-07-06 11:33:05"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "example": "2026-05-02 05:31:36"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "author": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "Nestor Powlowski"
-                                                            },
-                                                            "phone": {
-                                                                "type": "integer",
-                                                                "example": 89128060777
-                                                            },
-                                                            "email": {
-                                                                "type": "string",
-                                                                "example": "heaven19@example.com"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "example": "2026-01-10 17:40:45"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "example": "2026-05-02 05:24:33"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "status": {
-                                                        "type": "string",
-                                                        "example": "waiting"
-                                                    },
-                                                    "channel": {
-                                                        "type": "string",
-                                                        "example": "email"
-                                                    },
-                                                    "message": {
-                                                        "type": "string",
-                                                        "example": "Привет! Это тестовое уведомление."
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2026-05-02 06:26:54"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2026-05-02 06:26:54"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "pagination": {
-                                            "properties": {
-                                                "total": {
-                                                    "type": "integer",
-                                                    "example": 100
-                                                },
-                                                "per_page": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                },
-                                                "current_page": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "last_page": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Сообщения"
-                ],
-                "summary": "Создание нового сообщения",
-                "operationId": "createNotification",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "channel",
-                                    "message"
-                                ],
-                                "properties": {
-                                    "user_id": {
-                                        "description": "ID получателя",
-                                        "type": "integer",
-                                        "example": 123,
-                                        "nullable": true
-                                    },
-                                    "author_id": {
-                                        "description": "ID отправителя",
-                                        "type": "integer",
-                                        "example": 1,
-                                        "nullable": true
-                                    },
-                                    "message": {
-                                        "description": "Текст сообщения",
-                                        "type": "string",
-                                        "example": "Привет! Это тестовое уведомление.",
-                                        "maxLength": 500
-                                    },
-                                    "channel": {
-                                        "description": "Канал отправки",
-                                        "type": "string",
-                                        "example": "email",
-                                        "enum": [
-                                            "email",
-                                            "sms"
-                                        ]
-                                    },
-                                    "queue": {
-                                        "description": "Очередь обработки (приоритет доставки)",
-                                        "type": "string",
-                                        "example": "high",
-                                        "default": "default",
-                                        "enum": [
-                                            "high",
-                                            "default"
-                                        ]
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Сообщение успешно создано и добавлено в очередь",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Ошибка валидации",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The selected channel is invalid."
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/notifications/{id}": {
-            "get": {
-                "tags": [
-                    "Сообщения"
-                ],
-                "summary": "Получение конкретного сообщения по ID",
-                "operationId": "getNotificationById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Идентификатор сообщения",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 2007
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Данные сообщения",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 2007
-                                        },
-                                        "user": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 57
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Aniya Hackett"
-                                                },
-                                                "sms": {
-                                                    "type": "integer",
-                                                    "example": 89128060777
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "palma.skiles@example.com"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "example": "2025-07-06 11:33:05"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "example": "2026-05-02 05:31:36"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "author": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Nestor Powlowski"
-                                                },
-                                                "sms": {
-                                                    "type": "integer",
-                                                    "example": 89128060777
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "heaven19@example.com"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "example": "2026-01-10 17:40:45"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "example": "2026-05-02 05:24:33"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status": {
-                                            "type": "string",
-                                            "example": "delivered"
-                                        },
-                                        "channel": {
-                                            "type": "string",
-                                            "example": "email"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Привет! Это тестовое уведомление."
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "example": "2026-05-02 06:26:54"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "example": "2026-05-02 06:26:54"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Сообщение не найдено"
-                    }
-                }
-            }
-        },
-        "/notifications/{id}/status": {
-            "patch": {
-                "tags": [
-                    "Сообщения"
-                ],
-                "summary": "Обновление статуса сообщения (Callback от внешних шлюзов)",
-                "operationId": "updateNotificationStatus",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID уведомления",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 2007
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "status"
-                                ],
-                                "properties": {
-                                    "status": {
-                                        "description": "Новый статус сообщения",
-                                        "type": "string",
-                                        "example": "delivered",
-                                        "enum": [
-                                            "waiting",
-                                            "sent",
-                                            "delivered",
-                                            "discarded"
-                                        ]
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Статус успешно обновлен",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Status updated successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Сообщение не найдено"
-                    },
-                    "422": {
-                        "description": "Передан невалидный статус"
-                    }
-                }
-            }
-        },
-        "/users": {
-            "get": {
-                "tags": [
-                    "Пользователи"
-                ],
-                "summary": "Получение списка пользователей с фильтрацией и пагинацией",
-                "operationId": "getUsers",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Имя",
-                        "required": false
-                    },
-                    {
-                        "name": "sort",
-                        "in": "query",
-                        "description": "Сортировка",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "example": "name_asc"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Страница",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Список сообщений с пагинацией",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
+                                                    "slot_id": {
                                                         "type": "integer",
                                                         "example": 1
                                                     },
-                                                    "user_id": {
+                                                    "capacity": {
                                                         "type": "integer",
-                                                        "example": 123,
-                                                        "nullable": true
+                                                        "example": 10
                                                     },
-                                                    "message": {
-                                                        "type": "string",
-                                                        "example": "Ваш код подтверждения: 1234"
-                                                    },
-                                                    "channel": {
-                                                        "type": "string",
-                                                        "example": "email"
-                                                    },
-                                                    "status": {
-                                                        "type": "string",
-                                                        "example": "pending"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2025-09-25T00:24:43Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2025-09-25T00:24:43Z"
+                                                    "remaining": {
+                                                        "type": "integer",
+                                                        "example": 6
                                                     }
                                                 },
                                                 "type": "object"
@@ -577,7 +70,7 @@
                                             "properties": {
                                                 "total": {
                                                     "type": "integer",
-                                                    "example": 100
+                                                    "example": 45
                                                 },
                                                 "per_page": {
                                                     "type": "integer",
@@ -589,7 +82,7 @@
                                                 },
                                                 "last_page": {
                                                     "type": "integer",
-                                                    "example": 10
+                                                    "example": 5
                                                 }
                                             },
                                             "type": "object"
@@ -599,9 +92,102 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/slots/{id}/hold": {
+            "post": {
+                "tags": [
+                    "Холды"
+                ],
+                "summary": "Создание холда (бронирования места)",
+                "operationId": "f74dc621153c7063a2a638f8d81442ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     },
-                    "422": {
-                        "description": "Ошибка валидации параметров"
+                    {
+                        "name": "Idempotency-Key",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Холд успешно создан"
+                    },
+                    "409": {
+                        "description": "Конфликт: нет свободных мест"
+                    },
+                    "400": {
+                        "description": "Некорректный UUID в заголовке"
+                    }
+                }
+            }
+        },
+        "/holds/{id}/confirm": {
+            "post": {
+                "tags": [
+                    "Холды"
+                ],
+                "summary": "Подтверждение холда",
+                "operationId": "confirmHold",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Холд успешно подтвержден"
+                    },
+                    "409": {
+                        "description": "Конфликт: нет свободных мест или холд не в статусе held"
+                    },
+                    "404": {
+                        "description": "Холд не найден"
+                    }
+                }
+            }
+        },
+        "/holds/{id}": {
+            "delete": {
+                "tags": [
+                    "Холды"
+                ],
+                "summary": "Отмена холда",
+                "operationId": "cancelHold",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Холд успешно отменен"
+                    },
+                    "404": {
+                        "description": "Холд не найден"
                     }
                 }
             }
@@ -609,12 +195,12 @@
     },
     "tags": [
         {
-            "name": "Сообщения",
-            "description": "Сообщения"
+            "name": "Слоты",
+            "description": "Слоты"
         },
         {
-            "name": "Пользователи",
-            "description": "Пользователи"
+            "name": "Холды",
+            "description": "Холды"
         }
     ]
 }

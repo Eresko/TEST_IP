@@ -111,6 +111,7 @@ return [
                     'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
                 ],
                 'queue' => [
+                    'auto_declare' => true,
                     'exchange' => env('RABBITMQ_EXCHANGE_NAME'),
                     'exchange_type' => env('RABBITMQ_EXCHANGE_TYPE', 'direct'),
                     'exchange_routing_key' => env('RABBITMQ_EXCHANGE_ROUTING_KEY'),

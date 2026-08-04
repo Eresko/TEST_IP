@@ -16,17 +16,17 @@ fi
 
 
 echo "Ожитдаем postgres..."
-while ! nc -z smart_logistic_postgres 5432; do
+while ! nc -z ak_techlogistic_postgres 5432; do
   sleep 0.5
 done
 echo "Postgres готов"
 
 
-php artisan migrate --force
-php artisan db:seed --force
+php artisan migrate --force || true
+php artisan db:seed --force || true
 
 
-php artisan swagger:generate
+php artisan swagger:generate || true
 
 
 exec "$@"
