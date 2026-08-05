@@ -80,9 +80,9 @@ class HoldService
     public function executeGeodistributedHold(array $data): void {
 
         $slotId = $data['slot_id'];
-        $impotencyKey = $data['idempotency_key'];
+        $idempotencyKey = $data['idempotency_key'];
         try {
-            DB::transaction(function () use ($slotId, $impotencyKey) {
+            DB::transaction(function () use ($slotId, $idempotencyKey) {
                 $slot = Slot::where("id", $slotId)->lockForUpdate()->firstOrFail();
                 if ($slot->remaining <= 0) {
                     throw new \Exception("В БД закончились столы");
@@ -90,9 +90,9 @@ class HoldService
                 $slot->decrement('remaining');
                 Hold::create([
                         'slot_id' => $slotId,
-                        'idempotency_key' => $impotencyKey,
+                        'idempotency_key' => $idempotencyKey,
                         'status' => HoldStatus::HELD,
-                        'expired_at' => now()->addMinutes(5),
+                        'expires_at' => now()->addMinutes(5),
                         'response_data' => [
                             'slot_id' => $slotId,
                             'status' => HoldStatus::HELD->value,
@@ -102,7 +102,7 @@ class HoldService
 
                 $this->slotService->invalidateAvailabilityCache();
                 event(new HoldStatusUpdated(
-                    $impotencyKey,
+                    $idempotencyKey,
                     HoldStatus::HELD->value,
                     'Место успешно забронировано'
 
@@ -114,7 +114,7 @@ class HoldService
         catch (\Exception $e) {
             Cache::increment("slots:{$slotId}:remaining");
             event(new HoldStatusUpdated(
-                $impotencyKey,
+                $idempotencyKey,
                 'failed',
                 'Ошибка брони '. $e->getMessage()
             ));

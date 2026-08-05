@@ -27,7 +27,7 @@ class HoldServiceTest extends TestCase
 
         $data = [
             'slot_id' => $slot->id,
-            'impotency_key' => 'uuid-test-9999'
+            'idempotency_key' => 'c1724f8d-73b2-4809-9f7a-85b306b86432'
         ];
 
 
@@ -43,11 +43,11 @@ class HoldServiceTest extends TestCase
 
         $this->assertDatabaseHas('holds', [
             'slot_id' => $slot->id,
-            'idempotency_key' => 'uuid-test-9999',
+            'idempotency_key' => 'c1724f8d-73b2-4809-9f7a-85b306b86432',
             'status' => HoldStatus::HELD->value
         ]);
 
-        
+
         Event::assertDispatched(HoldStatusUpdated::class);
     }
 }

@@ -90,7 +90,6 @@ class SlotService
             'slot_id' => $slotId,
             'idempotency_key' => $idempotencyKey,
         ])->onQueue('hold_processing');
-        file_put_contents(storage_path() . '/TOPIC2.log', print_r(['2222'], true), FILE_APPEND | LOCK_EX); // вывод информации
 
         return [
           'status' => 202,
