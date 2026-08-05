@@ -49,7 +49,6 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # Сервер базы данных (оставляем тот, что вы выбрали, например postgres)
       postgres:
         image: postgres:15-alpine
         env:
@@ -60,7 +59,6 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready -U laravel -d ak_techlogistic_laravel" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      # 👇 ДОБАВЛЯЕМ НАСТОЯЩИЙ REDIS СЮДА
       redis:
         image: redis:alpine
         ports:
@@ -79,14 +77,24 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: dom, curl, libxml, mbstring, zip, redis, pdo, pdo_mysql, bcmath
+          extensions: dom, curl, libxml, mbstring, zip, redis, pdo, pdo_pgsql, bcmath
           coverage: none
 
-      # ... ваши промежуточные шаги (copy env, composer install, key:generate, migrate) ...
+      - name: Copy .env for Testing
+        run: php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
+
+      # 👇 ЭТОТ ШАГ ОБЯЗАТЕЛЬНО ДОЛЖЕН БЫТЬ ТУТ, ЧТОБЫ ПОЯВИЛАСЬ ПАПКА vendor/bin/phpunit
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Generate Key
+        run: php artisan key:generate --env=testing
+
+      - name: Migrate PHPUnit Configuration
+        run: vendor/bin/phpunit --migrate-configuration || true
 
       - name: Run Feature Tests
         env:
-          # Конфигурация вашей БД (укажите вашу актуальную, здесь для примера pgsql)
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
           DB_PORT: 5432
@@ -94,12 +102,12 @@ jobs:
           DB_USERNAME: laravel
           DB_PASSWORD: password
 
-          # 👇 ОЖИВЛЯЕМ REDIS ДЛЯ ТЕСТОВ
-          REDIS_CLIENT: phpredis      # Используем стандартный рабочий клиент вместо mock
-          REDIS_HOST: 127.0.0.1      # Подключаемся к поднятому выше сервису
+          REDIS_CLIENT: phpredis
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
-          CACHE_STORE: redis         # Или используйте тот store, который вызывает контроллер
+          CACHE_STORE: redis
           CACHE_DRIVER: redis
 
           SCOUT_DRIVER: collection
         run: vendor/bin/phpunit --testsuite=Feature
+  
