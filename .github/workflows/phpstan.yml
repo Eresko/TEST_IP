@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      # Сервер базы данных (оставляем тот, что вы выбрали, например postgres)
       postgres:
         image: postgres:15-alpine
         env:
@@ -58,6 +59,8 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready -U laravel -d ak_techlogistic_laravel" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      # 👇 ДОБАВЛЯЕМ НАСТОЯЩИЙ REDIS СЮДА
       redis:
         image: redis:alpine
         ports:
@@ -67,6 +70,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -75,40 +79,27 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          # Добавили pdo и pdo_mysql. Также отключаем ini-файлы, которые могут мешать
           extensions: dom, curl, libxml, mbstring, zip, redis, pdo, pdo_mysql, bcmath
           coverage: none
 
-      - name: Copy .env for Testing
-        run: php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
+      # ... ваши промежуточные шаги (copy env, composer install, key:generate, migrate) ...
 
-      - name: Install Dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Generate Key
-        run: php artisan key:generate --env=testing
-
-      # Запускаем миграцию конфига напрямую через вендорный PHPUnit (это уберет WARN)
-      - name: Migrate PHPUnit Configuration
-        run: vendor/bin/phpunit --migrate-configuration || true
-
-      # Запускаем тесты напрямую через vendor/bin/phpunit вместо artisan test.
-      # Это решает проблему дублирования флагов конфигурации и изоляции переменных среды.
       - name: Run Feature Tests
         env:
+          # Конфигурация вашей БД (укажите вашу актуальную, здесь для примера pgsql)
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
           DB_PORT: 5432
-          # Данные должны строго совпадать с секцией services -> postgres
           DB_DATABASE: ak_techlogistic_laravel
           DB_USERNAME: laravel
           DB_PASSWORD: password
 
-          # Настройки для изоляции внешних сервисов (Redis/Кэш/Очереди)
+          # 👇 ОЖИВЛЯЕМ REDIS ДЛЯ ТЕСТОВ
+          REDIS_CLIENT: phpredis      # Используем стандартный рабочий клиент вместо mock
+          REDIS_HOST: 127.0.0.1      # Подключаемся к поднятому выше сервису
+          REDIS_PORT: 6379
+          CACHE_STORE: redis         # Или используйте тот store, который вызывает контроллер
+          CACHE_DRIVER: redis
+
           SCOUT_DRIVER: collection
-          REDIS_CLIENT: mock
-          CACHE_STORE: array
-          CACHE_DRIVER: array
-          LOCK_DRIVER: array
-          QUEUE_CONNECTION: sync
         run: vendor/bin/phpunit --testsuite=Feature
