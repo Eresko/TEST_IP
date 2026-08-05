@@ -69,8 +69,6 @@ jobs:
           # Добавили pdo и pdo_mysql. Также отключаем ini-файлы, которые могут мешать
           extensions: dom, curl, libxml, mbstring, zip, redis, pdo, pdo_mysql, bcmath
           coverage: none
-          # Регистрируем эту версию PHP как глобальную для CLI
-          update-alternatives: true
 
       - name: Copy .env for Testing
         run: php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
