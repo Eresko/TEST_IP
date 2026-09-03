@@ -12,6 +12,7 @@ class OrderIdempotencyTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected bool $seed = true;
     /**
      * Проверяем, что при отправке нескольких запросов с одним Idempotency-Key
      * создается только один заказ, а последующие запросы возвращают закэшированный ответ.
