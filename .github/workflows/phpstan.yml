@@ -83,7 +83,6 @@ jobs:
       - name: Copy .env for Testing
         run: php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
 
-      # 👇 ЭТОТ ШАГ ОБЯЗАТЕЛЬНО ДОЛЖЕН БЫТЬ ТУТ, ЧТОБЫ ПОЯВИЛАСЬ ПАПКА vendor/bin/phpunit
       - name: Install Dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
@@ -110,4 +109,3 @@ jobs:
 
           SCOUT_DRIVER: collection
         run: vendor/bin/phpunit --testsuite=Feature
-  

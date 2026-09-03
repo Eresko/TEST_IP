@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Http\JsonResponse;
 class IdempotencyMiddleware
 {
     public function handle(Request $request, Closure $next): Response
@@ -33,7 +33,7 @@ class IdempotencyMiddleware
 
         try {
 
-            if ($cachedResponse = Cache::store('redis')->get($redisKey)) {
+            if ($cachedResponse = Cache::get($redisKey)) {
                 return response()->json($cachedResponse['body'], $cachedResponse['status']);
             }
 
@@ -41,9 +41,12 @@ class IdempotencyMiddleware
 
 
             if ($response->isSuccessful()) {
+                $responseData = $response instanceof JsonResponse
+                    ? $response->getData(true)
+                    : json_decode($response->getContent(), true);
                 Cache::put($redisKey, [
                     'status' => $response->getStatusCode(),
-                    'body'   => json_decode($response->getContent(), true)
+                    'body'   => $responseData
                 ], now()->addSeconds(15)); 
             }
 
